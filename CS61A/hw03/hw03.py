@@ -25,7 +25,13 @@ def num_eights(n):
     True
     """
     "*** YOUR CODE HERE ***"
-
+    if n<10:
+        if n==8:
+            return 1
+        else:
+            return 0
+    else:
+        return num_eights(n//10)+num_eights(n%10)
 
 def digit_distance(n):
     """Determines the digit distance of n.
@@ -47,6 +53,10 @@ def digit_distance(n):
     True
     """
     "*** YOUR CODE HERE ***"
+    if n<10:
+        return 0
+    else:
+        return digit_distance(n//10)+abs(n//10%10-n%10)
 
 
 def interleaved_sum(n, odd_func, even_func):
@@ -71,6 +81,14 @@ def interleaved_sum(n, odd_func, even_func):
     True
     """
     "*** YOUR CODE HERE ***"
+    def inner_help_f(k):
+        '''k is an odd number, calculate interleaved_sum from k to n'''
+        if k+2==n:
+            return odd_func(n)+odd_func(k)+even_func(k+1)
+        if k+1==n:
+            return even_func(n)+odd_func(k)
+        return inner_help_f(k+2)+odd_func(k)+even_func(k+1)
+    return inner_help_f(1)
 
 
 def next_smaller_dollar(bill):
@@ -107,7 +125,33 @@ def count_dollars(total):
     True
     """
     "*** YOUR CODE HERE ***"
-
+    max_bill=0 # max_bill为小于等于total的美钞最大面额
+    if total>=100:
+        max_bill=100
+    elif total>=50:
+        max_bill=50
+    elif total>=20:
+        max_bill=20
+    elif total>=10:
+        max_bill=10
+    elif total>=5:
+        max_bill=5
+    elif total>=1:
+        max_bill=1
+    else:
+        max_bill=0
+     
+    def count_partitions(n,m):  #使用1.7树递归--分割数
+        if n<0:
+            return 0
+        elif n==0:
+            return 1
+        elif m==None:
+            return 0
+        else:
+            return count_partitions(n-m,m)+count_partitions(n,next_smaller_dollar(m))
+    
+    return count_partitions(total,max_bill)
 
 def next_larger_dollar(bill):
     """Returns the next larger bill in order."""
@@ -143,7 +187,19 @@ def count_dollars_upward(total):
     True
     """
     "*** YOUR CODE HERE ***"
+    def count(n,m):  
+        '''逆转分割数的定义：(n,m)表示正整数n可以分割为不小于(原来是不大于)m的正整数的和
+        如(6,1)可以由(6,2)+(5,1)得到,即(n,m)=(n,m+1)+(n-m,m)'''
+        if n<0:
+            return 0
+        elif n==0:
+            return 1
+        elif next_larger_dollar(m)==None:
+            return 1
+        else:
+            return count(n,next_larger_dollar(m))+count(n-next_larger_dollar(m),m)
 
+    return count(total,1)
 
 def print_move(origin, destination):
     """Print instructions to move a disk."""
