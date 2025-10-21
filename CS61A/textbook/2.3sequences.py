@@ -2,6 +2,7 @@
 x = [1,2,3,4,5,6,7,8,9]
 print([i*10 for i in x if i%2==0])
 
+#==========(1)树=======================================
 # 树的构造
 def tree(root_label, branches=[]):
     '''构造函数tree():定义树的结构'''
@@ -28,7 +29,7 @@ def is_tree(tree):
     if type(tree) != list or len(tree) < 1:  # 输入类型为列表且长度大于等于1
         return False
     for branch in branches(tree):   # 检查输入的tree的所有分支是否是树，使用递归
-        if is_tree(branch)==False:   # 或者 if not is_tree(branch):
+        if is_tree(branch)==False:   # 或者 if not is_tree(branch):   
             return False
     return True
 
@@ -87,12 +88,96 @@ def print_parts(tree,partition=[]):
 print_parts(partition_tree(6,4))
 
 ## 二叉树
-def right_binarize(tree):    # 这里有个bug我今天还没改出来,可恶
+def right_binarize(tree):    
     '''根据tree构造一个右分叉的二叉树'''
-    if is_leaf(tree):
+    if isinstance(tree, int) or len(tree) == 1: # Fixbug:isinstance(对象,类型)用于检查一个对象是否属于某个类型.在or的情况下,如果前面的结果为True,则后面的判断不会运行.原代码的问题是会取到类型为int的数判断是否是叶子节点，而is_leaf需要branches()的tree[1:],int类型没有切片.
         return tree
     if len(tree)>2:  # 这里二叉树的列表长度是2
         tree = [tree[0],tree[1:]]
-    return [tree[0],right_binarize(tree[1])]
+    return [right_binarize(b) for b in tree]
 
 print(right_binarize([1, 2, 3, 4, 5, 6, 7]))
+
+#========(2)链表=====================================
+empty = 'empty'
+
+# 构造链表
+
+# 首先判断链表
+def is_link(s):
+    return s == empty or (len(s)==2 or is_link(s[1]))
+
+# 构造链表
+def link(first, rest):
+    assert is_link(rest), 'rest 必须是一个链表'
+    return [first, rest]
+
+# 定义选择器
+def first(s):
+    assert is_link(s),'s必须是一个链表'
+    assert s!=empty, '空链表没有第一个元素'  # 容易拉下
+    return s[0]
+
+def rest(s):
+    assert is_link(s),'s必须是一个链表'
+    assert s!=empty, '空链表没有剩余元素'    # 容易拉下
+    return s[1]
+
+
+# 序列抽象的条件------长度和元素选择
+
+## 长度
+def len_link(s):
+    '''返回链表s的长度'''
+    assert is_link(s)
+    total = 0
+    while s!=empty:
+        s,total=rest(s),total+1
+    return total
+
+## 元素选择
+def getitem_link(s,i):    # getitem的含义是get item,表示用索引或键获取某个元素
+    '''返回链表s中的第i个元素'''
+    assert is_link(s)
+    while i>0:
+        s,i=rest(s),i-1
+    return first(s)
+
+## 长度---用递归实现
+def len_link_recursive(s):
+    if s==empty:
+        return 0
+    else:
+        return 1+len_link_recursive(rest(s))
+    
+
+## 元素选择---用递归实现
+def getitem_link_recursive(s,i):
+    if i==0:
+        return first(s)
+    else:
+        return getitem_link_recursive(rest(s),i-1)
+
+# 序列操作------延长\应用\过滤\连接
+def extend_link(s,t):
+
+
+def apply_to_all_link(f,s):
+
+
+def keep_if_link(f,s):
+
+
+def join_link(s,separator):
+
+
+# 链表--递归构造--分割数
+def partitions(n,m):
+    '''返回一个包含 n 的分割方案的链表，其中每个正整数不超过 m
+    第一层每个元素都是一个链表,除最后一个empty外,其他元素都是一个方案'''
+
+
+def print_partitions(n,m):
+    
+
+
