@@ -160,24 +160,73 @@ def getitem_link_recursive(s,i):
 
 # 序列操作------延长\应用\过滤\连接
 def extend_link(s,t):
-
+    '''递归实现:将链表t以链表的格式延长链表s'''
+    assert is_link(s) and is_link(t)
+    if s == empty:
+        return t
+    else:
+        return link(first(s),extend_link(rest(s),t))
 
 def apply_to_all_link(f,s):
-
+    '''递归实现:链表s的所有元素(注意除empty外,empty只是为了完整链表结构,不算元素)应用函数f,即map的功能
+    实现方法与extend_link类似,使用递归直到s的empty终止,每次操作都对first(s)应用函数f'''
+    assert is_link(s)
+    if s == empty:
+        return empty
+    else:
+        return link(f(first(s)),apply_to_all_link(f,rest(s)))
 
 def keep_if_link(f,s):
-
+    '''递归实现:只过滤出链表s中满足函数f(函数返回True或False)的元素,以链表的形式输出,即filter的功能'''
+    assert is_link(s)
+    if s == empty:
+        return empty
+    else:
+        if f(first(s)) == False:                    
+            return keep_if_link(f,rest(s))   # 若s的第一个元素不满足f,则跳过
+        else:
+            return link(first(s),keep_if_link(f,rest(s)))
 
 def join_link(s,separator):
+    '''递归实现:将链表s中的元素,以separator为分隔符连接'''
+    assert is_link(s)
+    if s == empty:
+        return ''   # 到达递归终止位置时,返回空串
+    else:                  
+        if rest(s) == empty:      # 这里也可以用教材中的elif
+            return str(first(s))
+        else:
+            return str(first(s))+separator+join_link(rest(s),separator)
 
 
 # 链表--递归构造--分割数
 def partitions(n,m):
     '''返回一个包含 n 的分割方案的链表，其中每个正整数不超过 m
-    第一层每个元素都是一个链表,除最后一个empty外,其他元素都是一个方案'''
-
+    第一层每个元素都是一个链表,除最后一个empty外,其他元素都是一个方案
+    自己对照着代码,以(6,4)为例写了一遍过程,勉强能够理解
+    但是要自己想出并写出这段代码还比较难'''
+    if n == 0:
+        return link(empty,empty)
+    elif n<0 or m==0:
+        return empty
+    else:
+        using_m = partitions(n-m,m)
+        with_m = apply_to_all_link(lambda s:link(m,s),using_m)
+        without_m = partitions(n,m-1)
+        return extend_link(with_m,without_m)
 
 def print_partitions(n,m):
-    
+    '''将每种方案打印下来,由于最外层链表的元素都是一个方案,
+    因此只要对每个元素用join_link就可以实现
+    我的实现代码如下'''
+    part_link = partitions(n,m)
+    f = lambda s:print(join_link(s,separator=' + '))
+    apply_to_all_link(f,part_link)
+
+# 教材上打印分割方案的代码如下:
+def print_partitions_reference(n, m):
+    lists = partitions(n, m)
+    strings = apply_to_all_link(lambda s: join_link(s, " + "), lists)
+    print(join_link(strings, "\n"))
 
 
