@@ -13,7 +13,21 @@ def shuffle(s):
     """
     assert len(s) % 2 == 0, 'len(seq) must be even'
     "*** YOUR CODE HERE ***"
-
+    s = list(s)
+    s0 = s[:len(s)//2]
+    s1 = s[len(s)//2:]
+    result = []
+    for i in range(len(s)//2):
+        result.append(s0[i])
+        result.append(s1[i])
+    return result  # 测试通过
+    # 下面是我一开始写的代码,测试没通过,但是用所给例子均测试通过,可能是不推荐这样的做法
+    # s = list(s)
+    # s0 = s[:len(s)//2]
+    # s1 = s[len(s)//2:]
+    # for i in range(len(s)//2):
+    #     s0.insert(2*i+1,s1[i])
+    # return s0
 
 def deep_map(f, s):
     """Replace all non-list elements x with f(x) in the nested list s.
@@ -38,7 +52,12 @@ def deep_map(f, s):
     True
     """
     "*** YOUR CODE HERE ***"
-
+    for i in range(len(s)):
+        if isinstance(s[i],(int,float)):
+            s[i] = f(s[i])
+        else:
+            deep_map(f,s[i])   # 测试通过
+# 思路为遍历列表,遇到元素为列表的情况继续遍历该列表,由于是重复操作,使用递归
 
 HW_SOURCE_FILE=__file__
 
@@ -47,12 +66,12 @@ def planet(mass):
     """Construct a planet of some mass."""
     assert mass > 0
     "*** YOUR CODE HERE ***"
-
+    return ['planet',mass]
 def mass(p):
     """Select the mass of a planet."""
     assert is_planet(p), 'must call mass on a planet'
     "*** YOUR CODE HERE ***"
-
+    return p[1]
 def is_planet(p):
     """Whether p is a planet."""
     return type(p) == list and len(p) == 2 and p[0] == 'planet'
@@ -104,6 +123,15 @@ def balanced(m):
     True
     """
     "*** YOUR CODE HERE ***"
+    if is_planet(m):
+        return True
+    else:
+        if total_mass(end(left(m)))*length(left(m)) != total_mass(end(right(m)))*length(right(m)):
+            return False
+        else:
+            return (balanced(end(left(m))) and balanced(end(right(m)))) # 测试通过
+# 思路为递归,从上往下不断判断左右是否平衡,如果中间有一个不平衡,则直接返回False,直到到达递归终点,planet判断为平衡
+# 注意除了最开始的mobile,之后都需要左右两个arm的end同时保持平衡
 
 
 def berry_finder(t):
@@ -124,7 +152,18 @@ def berry_finder(t):
     True
     """
     "*** YOUR CODE HERE ***"
-
+    if label(t)=='berry':
+        return True
+    else:
+        if not is_leaf(t):
+            for branch in branches(t):
+                if not berry_finder(branch):
+                    continue
+                return berry_finder(branch)
+    return False     # 开始测的时候还抱着怀疑的心态,没想到一次测试就通过了
+# 因为重复查找一个树或者其分支是否包含berry,思路仍然是递归
+# 一开始没有if not berry_finder(branch): continue这段代码,想着会在某一branch下return False而直接终止
+# 因此想到了先跳过(continue),直到一个True也没有找到,最后返回False
 
 HW_SOURCE_FILE=__file__
 
@@ -139,7 +178,13 @@ def max_path_sum(t):
     17
     """
     "*** YOUR CODE HERE ***"
-
+    assert is_tree(t)
+    if is_leaf(t):
+        return label(t)
+    else:
+        return label(t)+max([max_path_sum(branch) for branch in branches(t)]) # 测试通过
+# 思路是递归,每次找剩下的分支中最大的最大和
+# 最后的结果就好像从叶子(底部)出发,不断打怪升级,最后到达顶端.
 
 def mobile(left, right):
     """Construct a mobile from a left arm and a right arm."""
