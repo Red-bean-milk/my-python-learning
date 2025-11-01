@@ -157,9 +157,9 @@ def berry_finder(t):
     else:
         if not is_leaf(t):
             for branch in branches(t):
-                if not berry_finder(branch):
-                    continue
-                return berry_finder(branch)
+                if not berry_finder(branch):  # 这三行代码可以直接替换如下,可以不需要continue:
+                    continue                  # if berry_finder(branch):  
+                return berry_finder(branch)   #     return True
     return False     # 开始测的时候还抱着怀疑的心态,没想到一次测试就通过了
 # 因为重复查找一个树或者其分支是否包含berry,思路仍然是递归
 # 一开始没有if not berry_finder(branch): continue这段代码,想着会在某一branch下return False而直接终止
