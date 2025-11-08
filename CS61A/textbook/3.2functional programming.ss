@@ -38,3 +38,91 @@ vscode中打开'管理',找到'设置',搜索code runner Executor Map,打开'在
     (+ (- 10 7)
         6)))
 (exit)     ;输出57
+
+;if语句标准格式: (if <predicate> <consequent> <alternative>)  # 见下方函数abs
+(display (>= 2 1))  ;  返回#t
+(exit)
+
+;===========3.2.2定义===================
+(define pi 3.14)   ; define 赋值
+(display (* pi 2))
+(exit)
+
+
+
+(define (square x) (* x x))  ; define 定义函数 标准格式:(define (<name> <formal parameters>) <body>)
+
+(display (square 10))
+(newline)                    ; 换行
+(display (square (square 3)))
+(exit)
+
+
+(define (average x y)
+    (/ (+ x y) 2))
+(display (average 1 3))
+(exit)  
+
+
+(define (abs x)
+    (if (< x 0)
+        (-x)
+        x))
+
+; lambda定义函数
+; 标准格式: (lambda (<formal-parameters>) <body>)
+
+(define (plus4_1 x) (+ x 4))
+(define plus4_2 (lambda (x) (+ x 4)))
+
+(display (plus4_1 5))
+(newline)
+(display (plus4_2 5))
+(exit)
+
+;lambda可以用作运算符
+(display ((lambda (x y z) (+ x y (* z z))) 1 2 3))
+(exit)  ; 12
+
+
+;==3.2.3复合类型============
+(define x (cons 1 2))   ; cons创建pair数据
+(display x)    ; (1 . 2)
+(newline)
+(display (car x))   ; 1
+(newline)
+(display (cdr x))   ; 2
+(exit)     
+
+
+(display 
+    (cons 1
+      (cons 2
+            (cons 3
+                  (cons 4 '())))))
+(exit)     ; (1 2 3 4)
+
+
+(display (list 1 2 3 4))
+(exit)     ; (1 2 3 4)
+
+;定义序列操作(长度和元素选择)
+(define (length items)    ;长度选择
+    (if (null? items)
+        0
+        (+ 1 (length (cdr items)))))
+
+(define (getitem items n)
+    (if (= n 0)
+        (car items)
+        (getitem (cdr items) (- n 1))))
+
+(define squares (list 1 4 9 16 25))
+
+(display (length squares))      ; 5
+(newline)
+(display (getitem squares 3))   ; 16 
+(exit)
+
+;=======3.2.4符号数据===============
+    
