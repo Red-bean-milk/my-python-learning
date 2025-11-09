@@ -125,4 +125,31 @@ vscode中打开'管理',找到'设置',搜索code runner Executor Map,打开'在
 (exit)
 
 ;=======3.2.4符号数据===============
-    
+(define a 1)
+(define b 2)
+
+(display (list a b))  ; 返回(1 2)
+(newline) 
+(display (list 'a 'b)) ; (a b)
+(newline)
+(display (list 'a b))  ; (a 2)
+(exit)
+
+(display (car '(a b c)))
+(newline)
+(display (cdr '(a b c)))
+(exit)
+
+;=======3.2.5海龟图形=================
+(define (repeat k fn) (if (> k 0)
+                        (begin (fn) (repeat (- k 1) fn))
+                        '()))
+
+(repeat 5
+        (lambda () (fd 100)
+                    (repeat 5
+                            (lambda () (fd 20) (rt 144)))
+                    (rt 144)))
+;scheme好像没有内置Turtle图形功能
+
+;python版谢尔宾斯三角形见 3.2turtle_sier.py
