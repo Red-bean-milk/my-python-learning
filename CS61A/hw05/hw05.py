@@ -43,15 +43,21 @@ def merge(a, b):
     >>> [next(result) for _ in range(10)]
     [2, 3, 5, 7, 8, 9, 11, 13, 14, 15]
     """
-    a_val, b_val = next(a), next(b)
-    while True:
+    a_val, b_val = next(a), next(b)   # 初始化a和b的值
+    while True:                       # 小的值先生成并走下一步，若相等，则一同走下一步
         if a_val == b_val:
             "*** YOUR CODE HERE ***"
+            yield a_val
+            a_val = next(a)
+            b_val = next(b)
         elif a_val < b_val:
             "*** YOUR CODE HERE ***"
+            yield a_val
+            a_val = next(a)
         else:
             "*** YOUR CODE HERE ***"
-
+            yield b_val
+            b_val = next(b)
 
 def stair_ways(n):
     """
@@ -67,7 +73,7 @@ def stair_ways(n):
     []
     """
     "*** YOUR CODE HERE ***"
-
+    
 
 def yield_paths(t, value):
     """
